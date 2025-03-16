@@ -1,10 +1,21 @@
-# React + Vite
+# 📝 To-Do List Web App with Firebase Authentication
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a **To-Do List Web App** built using **React.js**, **Firebase Authentication**, and **Firestore Database**.  
+Users can **sign up, log in, manage tasks**, and **edit their profile**.  
 
-Currently, two official plugins are available:
+## 🚀 Features
+- ✅ **User Authentication** (Sign up, Log in, Log out)
+- ✅ **Firestore Database Integration**
+- ✅ **Task Management** (Add, Edit, Complete, Delete Tasks)
+- ✅ **User Profile Management** (Update Name, DOB, Gender, Description)
+- ✅ **Protected Routes** (Only logged-in users can access tasks and profiles)
+- ✅ **Responsive UI with Tailwind CSS**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-Test this is a test
+## 🔧 **Setup Instructions**
+
+### **1️⃣ Install Dependencies**
+Ensure you have **Node.js** installed, then run:
+```bash
+npm install
