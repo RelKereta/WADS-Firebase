@@ -1,97 +1,91 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebase";
-import { collection, addDoc, deleteDoc, doc, onSnapshot, updateDoc, query, where } from "firebase/firestore";
+import { collection, addDoc, deleteDoc, doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
+import TodoForm from "./TodoForm";
+import Todo from "./Todo";
+import EditTodoForm from "./EditToDoForm";
 
 const TodoList = () => {
   const { user } = useAuth();
-  const [tasks, setTasks] = useState([]);
-  const [task, setTask] = useState("");
+  const [todos, setTodos] = useState([]);
   const [showCompleted, setShowCompleted] = useState(false);
+  const [editingTask, setEditingTask] = useState(null);
 
   useEffect(() => {
     if (!user) return;
 
-    const unsubscribe = onSnapshot(
-      query(collection(db, "todos"), where("userId", "==", user.uid)), 
-      (snapshot) => {
-        setTasks(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      }
-    );
+    const userTodosRef = collection(db, "users", user.uid, "todos");
+
+    const unsubscribe = onSnapshot(userTodosRef, (snapshot) => {
+      setTodos(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    });
 
     return () => unsubscribe();
   }, [user]);
 
-  const addTask = async () => {
-    if (task.trim()) {
-      await addDoc(collection(db, "todos"), { text: task, userId: user.uid, completed: false });
-      setTask("");
-    }
-  };
+  const addToDo = async (task) => {
+    if (!user) return;
 
-  const deleteTask = async (id) => {
-    await deleteDoc(doc(db, "todos", id));
+    await addDoc(collection(db, "users", user.uid, "todos"), {
+      task,
+      completed: false,
+      createdAt: new Date()
+    });
   };
 
   const toggleComplete = async (id, completed) => {
-    await updateDoc(doc(db, "todos", id), { completed: !completed });
+    if (!user) return;
+
+    const taskRef = doc(db, "users", user.uid, "todos", id);
+    await updateDoc(taskRef, { completed: !completed });
   };
 
-  const editTask = async (id, newText) => {
-    const updatedText = prompt("Edit Task:", newText);
-    if (updatedText !== null) {
-      await updateDoc(doc(db, "todos", id), { text: updatedText });
-    }
+  const deleteToDo = async (id) => {
+    if (!user) return;
+
+    const taskRef = doc(db, "users", user.uid, "todos", id);
+    await deleteDoc(taskRef);
+  };
+
+  const editToDo = (id, task) => {
+    setEditingTask({ id, task });
+  };
+
+  const updateTask = async (id, newTask) => {
+    if (!user) return;
+
+    const taskRef = doc(db, "users", user.uid, "todos", id);
+    await updateDoc(taskRef, { task: newTask });
+
+    setEditingTask(null); // Exit edit mode
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-xl font-bold mb-4 text-black">To-Do List</h2>
-      <input
-        type="text"
-        placeholder="New Task"
-        value={task}
-        onChange={(e) => setTask(e.target.value)}
-        className="w-full p-2 border border-gray-300 rounded-md text-black"
-      />
-      <button onClick={addTask} className="bg-blue-500 text-white px-4 py-2 rounded-md w-full mt-2">
-        Add
-      </button>
+    <div className="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg mt-6">
+      <h1 className="text-2xl font-semibold text-center mb-4 text-black">To-Do List</h1>
+      <TodoForm addToDo={addToDo} />
 
       <button
         onClick={() => setShowCompleted(!showCompleted)}
-        className="mt-4 bg-gray-500 text-white px-4 py-2 rounded-md w-full"
+        className="mb-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full"
       >
         {showCompleted ? "Show All Tasks" : "Show Completed Tasks"}
       </button>
 
-      <ul className="mt-4">
-        {tasks
-          .filter((task) => (showCompleted ? task.completed : true))
-          .map((task) => (
-            <li
-              key={task.id}
-              className="flex justify-between items-center bg-gray-100 p-2 mb-2 rounded-md text-black"
-            >
-              <span className={task.completed ? "line-through text-gray-400" : ""}>
-                {task.text}
-              </span>
-              <div className="space-x-2">
-                <button onClick={() => toggleComplete(task.id, task.completed)} className="text-green-500">
-                  ✔
-                </button>
-                <button onClick={() => editTask(task.id, task.text)} className="text-yellow-500">
-                  ✏
-                </button>
-                <button onClick={() => deleteTask(task.id)} className="text-red-500">
-                  🗑
-                </button>
-              </div>
-            </li>
-          ))}
-      </ul>
+      <div className="space-y-3">
+        {todos
+          .filter((todo) => (showCompleted ? todo.completed : true))
+          .map((todo) =>
+            editingTask?.id === todo.id ? (
+              <EditTodoForm key={todo.id} updateTask={updateTask} task={editingTask} />
+            ) : (
+              <Todo key={todo.id} task={todo} toggleComplete={toggleComplete} deleteToDo={deleteToDo} editToDo={editToDo} />
+            )
+          )}
+      </div>
     </div>
   );
 };
 
-export default TodoList; // ✅ Ensure this line exists
+export default TodoList;

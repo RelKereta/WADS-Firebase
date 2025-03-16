@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
-export const TodoForm = ({ addToDo }) => {
-    const [value, setValue] = useState("");
+const TodoForm = ({ addToDo }) => {
+  const [task, setTask] = useState("");
 
-    const handleSubmit = e => {
-        e.preventDefault();
-        addToDo(value);
-        setValue("");   
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!task.trim()) return;
+    addToDo(task);
+    setTask("");
+  };
 
-    return (
-        <form className="flex gap-2 p-2" onSubmit={handleSubmit}>
-            <input
-                type="text"
-                className="flex-grow p-2 border border-gray-300 rounded-md shadow-sm"
-                value={value}
-                placeholder="Enter task"
-                onChange={(e) => setValue(e.target.value)}
-            />
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Add Task</button>
-        </form>
-    );
+  return (
+    <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
+      <input
+        type="text"
+        placeholder="Add a task..."
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+        className="flex-grow p-2 border border-gray-300 rounded-md text-black"
+      />
+      <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+        Add
+      </button>
+    </form>
+  );
 };
+
+export default TodoForm;

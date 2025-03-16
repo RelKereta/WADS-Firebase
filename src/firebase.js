@@ -1,22 +1,21 @@
-// Import Firebase SDK functions
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBuJtuEI52YrXXbmvOsY-Gy4kBk2zr7Sm4",
-  authDomain: "todoapp-d018e.firebaseapp.com",
-  projectId: "todoapp-d018e",
-  storageBucket: "todoapp-d018e.firebasestorage.app", 
-  messagingSenderId: "771060288325",
-  appId: "1:771060288325:web:b378eb2bc15b52e8f34c2c",
-  measurementId: "G-V0X0EJKZCD"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);  
-const db = getFirestore(app); 
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+console.log("🔥 Firebase initialized successfully!");
 
 export { auth, db };
