@@ -1,4 +1,4 @@
-/* 🌟 Root Container Styling */
+/* Root Container Styling */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -6,7 +6,7 @@
   text-align: center;
 }
 
-/* 🌟 Logo Styling */
+/* Logo Styling */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -20,7 +20,7 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-/* 🔄 Logo Animation */
+/* Logo Animation */
 @keyframes logo-spin {
   from {
       transform: rotate(0deg);
@@ -36,17 +36,17 @@
   }
 }
 
-/* 📦 Card Styling */
+/* Card Styling */
 .card {
   padding: 2em;
 }
 
-/* 📚 Read the Docs Link */
+/* Read the Docs Link */
 .read-the-docs {
   color: #888;
 }
 
-/* ✏️ Override Input Styling to Prevent Conflicts */
+/* Override Input Styling to Prevent Conflicts */
 input {
   color: black !important;
   background-color: white !important;

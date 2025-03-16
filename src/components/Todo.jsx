@@ -13,21 +13,21 @@ const Todo = ({ task, toggleComplete, deleteToDo, editToDo }) => {
       </p>
 
       <div className="flex gap-3">
-        {/* ✅ Complete Task Button */}
+        {/* Complete Task Button */}
         <FontAwesomeIcon
           icon={faCheck}
           className={`cursor-pointer ${task.completed ? "text-green-400" : "text-gray-400"} hover:text-green-600`}
           onClick={() => toggleComplete(task.id, task.completed)}
         />
 
-        {/* ✏️ Edit Button */}
+        {/* Edit Button */}
         <FontAwesomeIcon
           icon={faPenToSquare}
           className="text-yellow-500 cursor-pointer hover:text-yellow-600"
           onClick={() => editToDo(task.id, task.task)}
         />
 
-        {/* 🗑 Delete Button */}
+        {/* Delete Button */}
         <FontAwesomeIcon
           icon={faTrash}
           className="text-red-500 cursor-pointer hover:text-red-600"

@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children }) => {
   return user ? children : <Navigate to="/login" />;
 };
 
-// ✅ Add PropTypes validation for `children`
+// Add PropTypes validation for `children`
 ProtectedRoute.propTypes = {
   children: PropTypes.node.isRequired,
 };
